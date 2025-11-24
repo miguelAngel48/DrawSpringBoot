@@ -2,6 +2,7 @@ package com.liceu.demo.services;
 
 import com.liceu.demo.dao.UserDAO;
 import com.liceu.demo.models.User;
+import com.liceu.demo.security.EncrypterPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 public class UserServices {
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    EncrypterPassword encrypterPassword;
 
     public boolean checkLogin(String username, String password){
         User loginUser = getUser(username);
-        if (loginUser != null && loginUser.getPassword().equals(password)){
+        if (loginUser != null && encrypterPassword.CheckEncriptPassword(password,loginUser.getPassword())){
             return true;
         }
         return false;
@@ -23,7 +26,8 @@ public class UserServices {
     }
 
     public boolean saveUser(String name, String password,String username,String passwordCheck){
-        if (password.equals(passwordCheck) && password.length() > 5){
+        if (password.equals(passwordCheck) && password.length() > 5 && !username.isEmpty() && !name.isEmpty()){
+            password = encrypterPassword.EncriptPassword(password);
             User u = new User();
             u.setName(name);
             u.setPassword(password);

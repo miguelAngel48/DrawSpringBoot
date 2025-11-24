@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ControllerUser {
     @Autowired
     UserServices userServices;
+
+    @Autowired
     HttpSession session;
+
     @GetMapping("/register")
     public String getRegister() {
         return "register";
@@ -32,7 +35,6 @@ public class ControllerUser {
 
     @GetMapping("/login")
     public String login() {
-        session.invalidate();
         return "login";
     }
 

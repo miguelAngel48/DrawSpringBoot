@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css">
+
+    <title>lienzo</title>
+</head>
+
+<body>
+<header>
+    <h2>
+        <b id="user" name="user" th:text="${user}">User</b>'s Draw
+    </h2>
+
+    <a th:href="@{/galery}" name="galery">Galery</a>
+    <a th:href="@{/lienzo}" name="draw">Draw</a>
+    <a th:href="@{/login}" name="logout">Logout</a>
+</header>
+
+<main>
+    <canvas id="lienzo"></canvas>
+    <aside id="log"></aside>
+</main>
+
+<table>
+    <th colspan="2">
+        <button id="clearDraw">Clear the Draw</button>
+    </th>
+
+    <tr>
+        <th><button id="comeback">&lt;</button></th>
+        <th><button id="forward">&gt;</button></th>
+    </tr>
+
+    <tr>
+        <th><label for="color">Select color: </label></th>
+        <th><input type="color" name="color" id="color"></th>
+    </tr>
+
+    <tr>
+        <th><label for="fill" class="notForPencil">fill: </label></th>
+        <th><input type="checkbox" name="fill" id="fill" class="notForPencil"></th>
+    </tr>
+
+    <tr>
+        <th><label for="shape">Type of shape:</label></th>
+        <th>
+            <select name="shape" id="shape">
+                <option value="touch">touch</option>
+                <option value="pencil">Pencil</option>
+                <option value="square">Square</option>
+                <option value="circle">Circle</option>
+                <option value="triangle">Triangle</option>
+                <option value="star">Star</option>
+            </select>
+        </th>
+    </tr>
+
+    <tr>
+        <th><label for="size" class="notForPencil">Size: </label></th>
+        <th><input type="range" name="size" id="size" class="notForPencil"></th>
+    </tr>
+
+    <tr>
+        <th><label for="stroke">Stroke: </label></th>
+        <th><input type="range" name="stroke" id="stroke"></th>
+    </tr>
+
+    <form th:action="@{/saveDraw}" method="post">
+        <tr>
+            <th>
+                <input type="text" name="nameDraw" id="nameDraw" placeholder="Name of Draw:">
+            </th>
+            <th>
+                <input type="submit" id="buttonSaveDraw" name="Save">
+            </th>
+        </tr>
+
+        <tr>
+            <th><input type="hidden" name="bodyShape" id="bodyShapesInput"></th>
+            <th><input type="hidden" name="userinput" id="userinput"></th>
+            <th><input type="hidden" name="canvasSizeInput" id="canvasSizeInput"></th>
+        </tr>
+    </form>
+
+</table>
+
+
+<div id="sizeModal" class="modal">
+    <div class="modal-content">
+        <h2>Canvas size</h2>
+
+        <label>Width:</label>
+        <input type="number" id="modalWidth" min="100" max="2000" value="500">
+        <div id="errorWidth" class="error"></div>
+
+        <label>Height:</label>
+        <input type="number" id="modalHeight" min="100" max="2000" value="500">
+        <div id="errorHeight" class="error"></div>
+
+        <button id="applySize">Create canvas</button>
+    </div>
+</div>
+
+<script th:src="@{/scripts/draw.js}"></script>
+
+</body>
+</html>

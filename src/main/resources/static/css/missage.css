@@ -1,0 +1,18 @@
+h1{
+    font-size: 4rem;
+}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+html{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}

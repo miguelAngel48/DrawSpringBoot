@@ -39,7 +39,7 @@
         </th>
     </tr>
 
-    <!-- LOOP -->
+
     <tr th:each="draw : ${lista}"
         th:class="${user == draw.nameUser} ? 'owns' : 'others'">
 
@@ -49,11 +49,11 @@
         <th th:text="${draw.dateSaved}"></th>
         <th th:text="${draw.dateUpdate}"></th>
 
-        <!-- canvasSize[0] and canvasSize[1] -->
+
         <th th:text="${draw.canvasSize[0]} + 'px'"></th>
         <th th:text="${draw.canvasSize[1]} + 'px'"></th>
 
-        <!-- Link redraw / create a copy -->
+
         <th>
             <a th:if="${user == draw.nameUser}"
                th:href="@{/lienzo(id=${draw.id}, drawName=${draw.name}, dateServer=${draw.dateSaved}, width=${draw.canvasSize[0]}, height=${draw.canvasSize[1]})}">
