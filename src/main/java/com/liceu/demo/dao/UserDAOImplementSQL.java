@@ -22,6 +22,7 @@ public class UserDAOImplementSQL implements UserDAO {
     };
     @Override
     public User getUser(String username) {
+
         List<User> list =  jdbcTemplate.query("select * from user where username=?",userRowMapper,username);
         return list.get(0);
     }

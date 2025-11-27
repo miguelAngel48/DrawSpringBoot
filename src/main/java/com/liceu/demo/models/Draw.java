@@ -5,7 +5,37 @@ public class Draw {
     String NameDraw;
     int idUser;
     String DateCreate;
+    int width;
+    int height;
+    boolean trash;
 
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isTrash() {
+        return trash;
+    }
+
+    public void setTrash(boolean trash) {
+        this.trash = trash;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight(int height) {
+        return this.height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public int getId() {
         return id;
