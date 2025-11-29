@@ -17,7 +17,7 @@ const saveDrawButton = document.querySelector('#buttonSaveDraw');
 const nameDraw = document.querySelector('#nameDraw');
 const back = document.querySelector("#comeback");
 const forward = document.querySelector("#forward");
-
+const idUser = document.querySelector('#id');
 const keyToShapeValue = {
     'a': 'touch',
     's': 'pencil',
@@ -146,7 +146,6 @@ function saveShapes() {
     const keyBase = (drawId)
         ? `canvas-shapes-${user.textContent}-${drawId}`
         : `canvas-shapes-${user.textContent}-draft`;
-    console.log(drawId);
     localStorage.setItem(`${keyBase}`, JSON.stringify(shapes));
     localStorage.setItem(`${keyBase}-returnShapes`, JSON.stringify(comeBackShapes));
     localStorage.setItem(`${keyBase}-returnConfiguration`,
@@ -512,22 +511,63 @@ if (saveDrawButton) {
 
 document.getElementById('buttonSaveDraw').addEventListener('click', saveShapesToServer);
 
+//function saveShapesToServer() {
+    // const jsonPayload = JSON.stringify(shapes);
+    // const userName = user.textContent.trim();
+    // const drawName = nameDraw.value.trim() || nombreAleatorio();
+    // const url = `/lienzo?user=${encodeURIComponent(userName)}&drawName=${encodeURIComponent(drawName)}`;
+    // fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: jsonPayload
+    // })
+    //     .then(result => {
+    //         if (!result.ok) {
+               
+    //             throw new Error(`Error HTTP ${result.status}: ${result.statusText}`);
+    //         }
+    //         return result.text(); 
+    //     })
+       
+    //     .then(responseText => {
+        //     console.log("Respuesta del servidor:", responseText); 
+
+        // })
+        // .catch(error => {
+        //     console.error("Error al guardar el dibujo:", error);
+        // });
+//}
 function saveShapesToServer() {
-
-    const bodyShapes = JSON.stringify(shapes);
-    const drawName = nameDraw.value.trim() || nombreAleatorio();
-    document.getElementById('bodyShapesInput').value = bodyShapes;
-    document.getElementById('userinput').value = user.textContent.trim();
-    const canvasSize = { width: canvas.width, height: canvas.height };
-    document.getElementById('canvasSizeInput').value = JSON.stringify(canvasSize);
-    nameDraw.value = drawName;
-    nameDraw.value = drawName;
-    clearAll();
-
+    const jsonShapes = JSON.stringify(shapes);
+    const drawName = nameDraw.value || nombreAleatorio();
+    let width = canvas.width
+    let height = canvas.height
+    const fetchData = {
+        jsonShapes: jsonShapes,
+        drawName: drawName,
+        idUser: idUser.textContent,
+        width: width,
+        height: height, 
+        trash: false
+    }
+    console.log(fetchData)
+    const url = `/lienzo/save`;
+    fetch(url,{
+         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify(fetchData)  
+    })
+    .then(resp =>{
+        if(resp.ok) console.log("Los datos del dibujo se han guardado correctamente en la base de datos")
+    }).catch(e =>{
+        console.e("Error", e);
+    })
 
 
 }
-
 function nombreAleatorio() {
     const fruta = [
         'banana', 'pera', 'manzana', 'kiwi', 'pomelo', 'sandia', 'melon', 'cereza',
@@ -539,7 +579,7 @@ function nombreAleatorio() {
         'brillante', 'misterioso', 'dulce', 'oscuro', 'silvestre', 'gigante',
         'diminuto', 'transparente', 'silencioso', 'soñador', 'antiguo', 'moderno',
         'fresco', 'salada', 'audaz', 'juguetón'
-    ];
+    ]; 
     const indexFruta = Math.floor(Math.random() * fruta.length);
     const indexadjetivo = Math.floor(Math.random() * adjetivo.length);
     let nameRandom = fruta[indexFruta] + ' ' + adjetivo[indexadjetivo];

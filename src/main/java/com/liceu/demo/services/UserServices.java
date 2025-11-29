@@ -15,10 +15,7 @@ public class UserServices {
 
     public boolean checkLogin(String username, String password){
         User loginUser = getUser(username);
-        if (loginUser != null && encrypterPassword.CheckEncriptPassword(password,loginUser.getPassword())){
-            return true;
-        }
-        return false;
+        return loginUser != null && encrypterPassword.CheckEncriptPassword(password, loginUser.getPassword());
     }
 
     public User getUser(String username){
@@ -26,7 +23,7 @@ public class UserServices {
     }
 
     public boolean saveUser(String name, String password,String username,String passwordCheck){
-        if (password.equals(passwordCheck) && password.length() > 5 && !username.isEmpty() && !name.isEmpty()){
+        if (userIsValid(name,password,username,passwordCheck)){
             password = encrypterPassword.EncriptPassword(password);
             User u = new User();
             u.setName(name);
@@ -36,6 +33,11 @@ public class UserServices {
             return true;
         }
         return false;
+    }
+
+    private boolean userIsValid(String name, String password, String username, String passwordCheck) {
+      return  (password.equals(passwordCheck) && password.length() > 5 && !username.isEmpty() && !name.isEmpty());
+
     }
 
 

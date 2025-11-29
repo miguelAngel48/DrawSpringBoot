@@ -1,6 +1,6 @@
 package com.liceu.demo.models;
 
-public class shape {
+public class Shape {
     int id;
     int VersionId;
     String shapes;

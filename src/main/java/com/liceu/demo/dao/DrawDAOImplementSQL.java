@@ -26,16 +26,18 @@ public class DrawDAOImplementSQL implements DrawDAO{
     };
     @Override
     public void saveDraw( Draw draw) {
-        jdbcTemplate.update("insert into draw(nameDraw,idUser,width,height,trash) values(?,?,?,?,?)",
+        int trashValue = draw.isTrash() ? 1 : 0;
+        jdbcTemplate.update("insert into draw(NameDraw,idUser,width,height,trash) values(?,?,?,?,?)",
                  draw.getNameDraw()
                 ,draw.getIdUser()
                 ,draw.getWidth()
                 ,draw.getHeight()
-                ,draw.isTrash());
+                ,trashValue);
     }
 
     @Override
     public List<Draw> getDrawsUser(String user) {
+
         return List.of();
     }
 

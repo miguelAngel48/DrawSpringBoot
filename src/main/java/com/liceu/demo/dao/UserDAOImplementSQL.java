@@ -7,12 +7,13 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public class UserDAOImplementSQL implements UserDAO {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private RowMapper<User> userRowMapper = (rs, rn) ->{
+    private RowMapper<User> userRowMapper = (rs, rn) -> {
         User u = new User();
         u.setId(rs.getInt("id"));
         u.setName(rs.getString("name"));
@@ -20,10 +21,11 @@ public class UserDAOImplementSQL implements UserDAO {
         u.setUsername(rs.getString("username"));
         return u;
     };
+
     @Override
     public User getUser(String username) {
 
-        List<User> list =  jdbcTemplate.query("select * from user where username=?",userRowMapper,username);
+        List<User> list = jdbcTemplate.query("select * from user where username=?", userRowMapper, username);
         return list.get(0);
     }
 
@@ -31,8 +33,11 @@ public class UserDAOImplementSQL implements UserDAO {
     public int lastId() {
         return 0;
     }
+
     @Override
-    public void save(User u){
-        jdbcTemplate.update("insert into user(name,password,username) values(?,?,?)",u.getName(), u.getPassword(),u.getUsername());
+    public void save(User u) {
+        jdbcTemplate.update("insert into user(name,password,username) values(?,?,?)", u.getName(), u.getPassword(), u.getUsername());
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.liceu.demo.models;
 
-public class versionDraw {
+public class VersionDraw {
     int id;
     String NameDraw;
     int idUser;

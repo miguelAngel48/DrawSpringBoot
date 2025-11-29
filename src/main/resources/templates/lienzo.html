@@ -14,7 +14,7 @@
 <body>
 <header>
     <h2>
-        <b id="user" name="user" th:text="${user}">User</b>'s Draw
+        <b id="id" name="id" th:text="${id}"></b> <b id="user" name="user" th:text="${user}"></b>'s Draw
     </h2>
 
     <a th:href="@{/galery}" name="galery">Galery</a>
@@ -23,7 +23,10 @@
 </header>
 
 <main>
+    <div>
+        <h1>draw.name</h1>
     <canvas id="lienzo"></canvas>
+    </div>
     <aside id="log"></aside>
 </main>
 
@@ -71,7 +74,7 @@
         <th><input type="range" name="stroke" id="stroke"></th>
     </tr>
 
-    <form th:action="@{/saveDraw}" method="post">
+    <!-- <form th:action="@{/galery}" method="post"> -->
         <tr>
             <th>
                 <input type="text" name="nameDraw" id="nameDraw" placeholder="Name of Draw:">
@@ -80,13 +83,13 @@
                 <input type="submit" id="buttonSaveDraw" name="Save">
             </th>
         </tr>
-
+<!-- 
         <tr>
             <th><input type="hidden" name="bodyShape" id="bodyShapesInput"></th>
             <th><input type="hidden" name="userinput" id="userinput"></th>
             <th><input type="hidden" name="canvasSizeInput" id="canvasSizeInput"></th>
-        </tr>
-    </form>
+        </tr> -->
+    <!-- </form> -->
 
 </table>
 

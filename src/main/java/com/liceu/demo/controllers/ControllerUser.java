@@ -20,6 +20,10 @@ public class ControllerUser {
     @Autowired
     HttpSession session;
 
+    @GetMapping("/")
+    public String redirectToLogin() {
+        return "redirect:/login";
+    }
     @GetMapping("/register")
     public String getRegister() {
         return "register";
@@ -42,6 +46,8 @@ public class ControllerUser {
     public String logincheck(Model model, @RequestParam String username, @RequestParam String password) {
         if (userServices.checkLogin(username, password)) {
             session.setAttribute("user",username);
+            int idUser = userServices.getUser(username).getId();
+            session.setAttribute("id",idUser);
             return "redirect:/galery";
         } else {
             model.addAttribute("message", "The user does not exist or the password are invalid ");
