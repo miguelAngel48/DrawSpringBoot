@@ -1,40 +1,41 @@
 package com.liceu.demo.models;
 
 public class VersionDraw {
-    int id;
-    String NameDraw;
-    int idUser;
-    String CreateDate;
-
-    public int getId() {
-        return id;
+   int versionId;
+   int drawid;
+   String dateUpdate;
+    int versionNum;
+    public int getVersionNum() {
+        return versionNum;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setVersionNum(int versionNum) {
+        this.versionNum = versionNum;
     }
 
-    public String getNameDraw() {
-        return NameDraw;
+    public String getDateUpdate() {
+        return dateUpdate;
     }
 
-    public void setNameDraw(String nameDraw) {
-        NameDraw = nameDraw;
+    public void setDateUpdate(String dateUpdate) {
+        this.dateUpdate = dateUpdate;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public int getDrawid() {
+        return drawid;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setDrawid(int drawid) {
+        this.drawid = drawid;
     }
 
-    public String getCreateDate() {
-        return CreateDate;
+    public int getVersionId() {
+        return versionId;
     }
 
-    public void setCreateDate(String createDate) {
-        CreateDate = createDate;
+    public void setVersionId(int versionId) {
+        this.versionId = versionId;
     }
+
+
 }

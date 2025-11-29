@@ -38,6 +38,11 @@ public class UserDAOImplementSQL implements UserDAO {
     public void save(User u) {
         jdbcTemplate.update("insert into user(name,password,username) values(?,?,?)", u.getName(), u.getPassword(), u.getUsername());
     }
+    public boolean checkUsernameExists(String username) {
 
+        String sql = "SELECT COUNT(*) FROM user WHERE username = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
+        return count != null && count > 0;
+    }
 
 }

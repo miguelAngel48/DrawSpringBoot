@@ -6,5 +6,5 @@ public interface UserDAO {
     User getUser(String username);
     int lastId();
     void save(User u);
-
+    public boolean checkUsernameExists(String username);
 }

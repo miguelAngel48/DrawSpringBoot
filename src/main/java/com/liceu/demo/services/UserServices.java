@@ -23,7 +23,7 @@ public class UserServices {
     }
 
     public boolean saveUser(String name, String password,String username,String passwordCheck){
-        if (userIsValid(name,password,username,passwordCheck)){
+        if (isValidRegistrationData(name,password,username,passwordCheck)){
             password = encrypterPassword.EncriptPassword(password);
             User u = new User();
             u.setName(name);
@@ -35,8 +35,17 @@ public class UserServices {
         return false;
     }
 
+    public boolean isValidRegistrationData(String name, String password, String username, String passwordCheck) {
+
+        if (!userIsValid(name, password, username, passwordCheck)) {
+            return false;
+        }
+        return !userDAO.checkUsernameExists(username);
+    }
+
     private boolean userIsValid(String name, String password, String username, String passwordCheck) {
       return  (password.equals(passwordCheck) && password.length() > 5 && !username.isEmpty() && !name.isEmpty());
+
 
     }
 
