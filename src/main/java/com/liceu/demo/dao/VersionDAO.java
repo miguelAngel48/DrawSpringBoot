@@ -5,4 +5,5 @@ import com.liceu.demo.models.VersionDraw;
 public interface VersionDAO {
     void saveVersion(VersionDraw vers);
     int findMaxVersionNumByDrawId(int drawId);
+    public VersionDraw getVersionForId(int id);
 }

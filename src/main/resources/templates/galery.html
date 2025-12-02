@@ -12,50 +12,68 @@
 </head>
 
 <body>
-<header>
-    <h2>
-        Hello <b id="user" name="user" th:text="${user}"></b>
-    </h2>
+    <header>
+        <h2>
+            Hello <b id="user" name="user" th:text="${user}"></b>
+        </h2>
 
-    <a th:href="@{/galery}" name="galery">Galery</a>
-    <a th:href="@{/lienzo}" name="draw">Draw</a>
-    <a th:href="@{/login}" name="logout">Logout</a>
-</header>
+        <a th:href="@{/galery}" name="galery">Galery</a>
+        <a th:href="@{/lienzo}" name="draw">Draw</a>
+        <a th:href="@{/login}" name="logout">Logout</a>
+    </header>
 
-<table id="galery">
-    <tr>
-        <th>User</th>
-        <th>ID</th>
-        <th>Draw name</th>
-        <th>creation date</th>
-        <th>last update</th>
-        <th>width</th>
-        <th>height</th>
-        <th>
-            <select name="list" id="listUsers">
-                <option value="othersDraw">all draws</option>
-                <option value="userDraw" th:text="${user} + ' draws'"></option>
-            </select>
+    <table id="galery">
+        <tr>
+            <th>User</th>
+            <th>ID</th>
+            <th>Draw name</th>
+            <th>creation date</th>
+            <th>width</th>
+            <th>height</th>
+            <th>
+                <select name="list" id="listUsers">
+                    <option value="othersDraw">all draws</option>
+                    <option value="userDraw" th:text="${user} + ' draws'"></option>
+                </select>
+            </th>
+        </tr>
+
+        <tr th:each="draw : ${draws}">
+            <th th:text="${draw.name}"></th>
+            <th th:text="${draw.id}"></th>
+            <th th:text="${draw.drawName}"></th>
+            <th th:text="${draw.DateCreate}"></th>
+            <th th:text="${draw.width}+ 'px'"></th>
+            <th th:text="${draw.height}+ 'px'"></th>
+             <th>
+            <a th:if="${user == draw.name}"
+               th:href="@{/lienzo(id=${draw.id}, drawName=${draw.drawName}, dateServer=${draw.DateCreate}, width=${draw.width}, height=${draw.height})}">
+                redraw
+            </a>
+
+            <a th:if="${user != draw.name}"
+               th:href="@{/lienzo(id=${draw.id}, drawName=${draw.drawName}, dateServer=${draw.DateCreate}, width=${draw.width}, height=${draw.height})}">
+                create a copy
+            </a>
         </th>
-    </tr>
 
+        </tr>
+        <!-- <tr th:each="draw : ${draws}"
+        th:class="${user == draw.user.id} ? 'owns' : 'others'">
 
-    <tr th:each="draw : ${lista}"
-        th:class="${user == draw.nameUser} ? 'owns' : 'others'">
-
-        <th th:text="${draw.nameUser}"></th>
+        <th th:text="${draw.user.nameUser}"></th>
         <th th:text="${draw.id}"></th>
-        <th th:text="${draw.name}"></th>
+        <th th:text="${draw.NameDraw}"></th>
         <th th:text="${draw.dateSaved}"></th>
-        <th th:text="${draw.dateUpdate}"></th>
 
 
-        <th th:text="${draw.canvasSize[0]} + 'px'"></th>
-        <th th:text="${draw.canvasSize[1]} + 'px'"></th>
+
+        <th th:text="${draw.width} + 'px'"></th>
+        <th th:text="${draw.height} + 'px'"></th>
 
 
         <th>
-            <a th:if="${user == draw.nameUser}"
+            <a th:if="${user == draw.name}"
                th:href="@{/lienzo(id=${draw.id}, drawName=${draw.name}, dateServer=${draw.dateSaved}, width=${draw.canvasSize[0]}, height=${draw.canvasSize[1]})}">
                 redraw
             </a>
@@ -74,10 +92,10 @@
                 <input type="submit" value="delete">
             </form>
         </th>
-    </tr>
-</table>
+    </tr> -->
+    </table>
 
-<script th:src="@{/scripts/galery.js}"></script>
+    <script th:src="@{/scripts/galery.js}"></script>
 </body>
 
 </html>

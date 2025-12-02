@@ -6,5 +6,6 @@ public record CanvasClientDTO(int id,
                               int idUser,
                               int width,
                               int height,
-                              boolean trash) {
+                              boolean trash,
+                              boolean publico) {
 }

@@ -27,6 +27,7 @@ const keyToShapeValue = {
     'h': 'star'
 };
 
+
 document.addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
     if (!keyToShapeValue[key]) return;
@@ -43,6 +44,8 @@ let isDrawing = false;
 let drawLine = [];
 let comeBackShapes = [];
 let dateLocal = new Date();
+let currentDrawId = 0;
+let publico = 0;
 
 color.addEventListener("input", e => {
     if (selectedShape) {
@@ -545,12 +548,14 @@ function saveShapesToServer() {
     let width = canvas.width
     let height = canvas.height
     const fetchData = {
+        id: currentDrawId,
         jsonShapes: jsonShapes,
         drawName: drawName,
         idUser: idUser.textContent,
         width: width,
         height: height, 
-        trash: false
+        trash: false,
+        publico: false
     }
     console.log(fetchData)
     const url = `/lienzo/save`;
@@ -561,8 +566,20 @@ function saveShapesToServer() {
         }, body: JSON.stringify(fetchData)  
     })
     .then(resp =>{
-        if(resp.ok) console.log("Los datos del dibujo se han guardado correctamente en la base de datos")
-    }).catch(e =>{
+        if(resp.ok){
+           let prueba = resp.json();
+            console.log(prueba)
+           return prueba
+           
+        } 
+    }).then(returnedId =>{
+        console.log(returnedId)
+        if(returnedId > 0){
+            currentDrawId = returnedId;
+            console.log(`Guardado automático exitoso. ID del dibujo: ${currentDrawId}`);
+            }
+    })
+    .catch(e =>{
         console.e("Error", e);
     })
 

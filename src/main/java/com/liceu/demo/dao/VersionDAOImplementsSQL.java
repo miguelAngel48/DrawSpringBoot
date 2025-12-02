@@ -1,10 +1,13 @@
 package com.liceu.demo.dao;
 
+import com.liceu.demo.models.Draw;
 import com.liceu.demo.models.VersionDraw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class VersionDAOImplementsSQL implements VersionDAO{
@@ -28,5 +31,10 @@ public class VersionDAOImplementsSQL implements VersionDAO{
         String sql = "SELECT MAX(versionNum) FROM version WHERE drawId = ?";
         Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, drawId);
         return (maxVersion == null) ? 0 : maxVersion;
+    }
+    public VersionDraw getVersionForId(int drawid){
+        String sql = "SELECT * From version WHERE drawid = ?";
+        List<VersionDraw> version =  jdbcTemplate.query(sql,versionDrawRowMapper,drawid);
+        return version.get(0);
     }
 }
