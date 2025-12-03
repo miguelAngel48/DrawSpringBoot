@@ -16,13 +16,18 @@
         <h2>
             Hello <b id="user" name="user" th:text="${user}"></b>
         </h2>
-
-        <a th:href="@{/galery}" name="galery">Galery</a>
+        <a th:href="@{/privado}" name="galery">Private Galery</a>
+        <a th:href="@{/galery}" name="galery">Public Galery</a>
         <a th:href="@{/lienzo}" name="draw">Draw</a>
         <a th:href="@{/login}" name="logout">Logout</a>
     </header>
 
     <table id="galery">
+        <tr>
+
+        <th id="ownGalery"  colspan="7">public galery</th>
+
+    </tr>
         <tr>
             <th>User</th>
             <th>ID</th>
@@ -30,12 +35,7 @@
             <th>creation date</th>
             <th>width</th>
             <th>height</th>
-            <th>
-                <select name="list" id="listUsers">
-                    <option value="othersDraw">all draws</option>
-                    <option value="userDraw" th:text="${user} + ' draws'"></option>
-                </select>
-            </th>
+           
         </tr>
 
         <tr th:each="draw : ${draws}">

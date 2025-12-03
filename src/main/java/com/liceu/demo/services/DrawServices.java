@@ -37,6 +37,13 @@ public class DrawServices {
     public int getLastId() {
         return drawDAO.getDrawById();
     }
+    public List<DateGaleryDTO> getDrawsUser(int idUser) {
+        List<DateGaleryDTO> allContentGalery = new ArrayList<>();
+        for ( Draw draw :drawDAO.getDrawsUser(idUser)){
+            allContentGalery.add(transformDrawToDTO(draw));
+        }
+        return allContentGalery;
+    }
 public List<DateGaleryDTO> getPublicDraws(){
     List<DateGaleryDTO> allContentGalery = new ArrayList<>();
     for ( Draw draw :drawDAO.getDrawsPublics()){
@@ -49,7 +56,6 @@ public List<DateGaleryDTO> getPublicDraws(){
          User u = userDAO.getUserById(draw.getIdUser());
         String userName = u.getUsername();
         String jsonShapesData = "";
-        System.out.println(userName);
         DateGaleryDTO dto = new DateGaleryDTO(
                 draw.getId(),
                 jsonShapesData,

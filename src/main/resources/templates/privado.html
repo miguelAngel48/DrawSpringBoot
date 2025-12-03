@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css" />
+    <meta charset="UTF-8">
+    <title>privado</title>
+</head>
+<body>
+  <header>
+        <h2>
+            Hello <b id="user" name="user" th:text="${user}"></b>
+        </h2>
+        <a th:href="@{/privado}" name="galery">Private Galery</a>
+        <a th:href="@{/galery}" name="galery">Public Galery</a>
+        <a th:href="@{/lienzo}" name="draw">Draw</a>
+        <a th:href="@{/login}" name="logout">Logout</a>
+    </header>
+
+<table id="galery">
+    <tr>
+
+        <th id="ownGalery" th:text="'galery of '+ ${user}" colspan="6"></th>
+
+    </tr>
+    <tr>
+
+        <th>ID</th>
+        <th>Draw name</th>
+        <th>creation date</th>
+        <th>width</th>
+        <th>height</th>
+    </tr>
+
+    <tr th:each="draw : ${draws}">
+        <th th:text="${draw.id}"></th>
+        <th th:text="${draw.drawName}"></th>
+        <th th:text="${draw.DateCreate}"></th>
+        <th th:text="${draw.width}+ 'px'"></th>
+        <th th:text="${draw.height}+ 'px'"></th>
+        <th>
+            <a th:if="${user == draw.name}"
+               th:href="@{/lienzo(id=${draw.id}, drawName=${draw.drawName}, dateServer=${draw.DateCreate}, width=${draw.width}, height=${draw.height})}">
+                redraw
+            </a>
+
+            <a th:if="${user != draw.name}"
+               th:href="@{/lienzo(id=${draw.id}, drawName=${draw.drawName}, dateServer=${draw.DateCreate}, width=${draw.width}, height=${draw.height})}">
+                create a copy
+            </a>
+        </th>
+
+    </tr>
+</table>
+</body>
+</html>

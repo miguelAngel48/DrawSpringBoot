@@ -70,13 +70,13 @@ public class DrawDAOImplementSQL implements DrawDAO {
     }
 
     @Override
-    public List<Draw> getDrawsUser(String user) {
-
-        return List.of();
+    public List<Draw> getDrawsUser(int userId) {
+        return jdbcTemplate.query("select * from draw where idUser = ?", drawRowMapper,userId);
     }
     public List<Draw> getDrawsPublics(){
         return  jdbcTemplate.query("select * from draw where publico = 1", drawRowMapper);
     }
+
 
     @Override
     public void deleteDraw(String user, int idUser) {

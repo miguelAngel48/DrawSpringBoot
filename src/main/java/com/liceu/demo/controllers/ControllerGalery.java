@@ -28,10 +28,16 @@ public class ControllerGalery {
         model.addAttribute("user", session.getAttribute("user"));
         List<DateGaleryDTO> allPublicsDraws = drawServices.getPublicDraws();
         model.addAttribute("draws",allPublicsDraws);
-        model.getAttribute("listUsers");
         return "galery";
     }
-
+    @GetMapping("/privado")
+    public String privado(Model model){
+        model.addAttribute("user", session.getAttribute("user"));
+        int idUser = (int) session.getAttribute("id");
+        List<DateGaleryDTO> allUsersDraws = drawServices.getDrawsUser(idUser);
+        model.addAttribute("draws",allUsersDraws);
+        return "privado";
+    }
 
     @GetMapping("/lienzo")
     public String draw(Model model) {

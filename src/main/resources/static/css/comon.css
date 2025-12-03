@@ -89,3 +89,8 @@ input[type="submit"]:active,a:active,button:active,#buttonSaveDraw:active {
 input[type="submit"]:hover,a:hover,button:hover,#buttonSaveDraw:hover {
     scale: 1.1;
 }
+
+#ownGalery{
+text-align: center;
+font-size: 40px;
+}
