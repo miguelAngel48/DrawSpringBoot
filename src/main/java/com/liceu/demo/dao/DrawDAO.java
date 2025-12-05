@@ -5,9 +5,15 @@ import com.liceu.demo.models.Draw;
 import java.util.List;
 
 public interface DrawDAO {
-    int saveDraw( Draw draw);
+    int saveDraw(Draw draw);
+
     List<Draw> getDrawsUser(int idUser);
+
     void deleteDraw(String user, int idUser);
+
     int getDrawById();
-     List<Draw> getDrawsPublics();
+
+    List<Draw> getDrawsPublics();
+
+    public Draw getDrawForId(int id);
 }

@@ -8,7 +8,7 @@ public class Draw {
     int width;
     int height;
     boolean trash;
-
+    boolean publico;
     public boolean isPublico() {
         return publico;
     }
@@ -17,7 +17,7 @@ public class Draw {
         this.publico = publico;
     }
 
-    boolean publico;
+
 
     public int getHeight() {
         return height;

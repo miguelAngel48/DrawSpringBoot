@@ -33,7 +33,10 @@ public class VersionDAOImplementsSQL implements VersionDAO{
         return (maxVersion == null) ? 0 : maxVersion;
     }
     public VersionDraw getVersionForId(int drawid){
-        String sql = "SELECT * From version WHERE drawid = ?";
+        String sql = "SELECT * \n" +
+                "FROM version \n" +
+                "WHERE drawid = ? \n" +
+                "ORDER BY versionNum DESC";
         List<VersionDraw> version =  jdbcTemplate.query(sql,versionDrawRowMapper,drawid);
         return version.get(0);
     }

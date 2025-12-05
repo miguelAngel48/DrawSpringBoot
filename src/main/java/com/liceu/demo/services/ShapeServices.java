@@ -17,4 +17,8 @@ public class ShapeServices {
         shape.setShapes(shapes);
         shapesDAO.saveShapes(shape);
     }
+    public String getShapes(int idVersion){
+        Shape shape = shapesDAO.getShape(idVersion);
+        return shape.getShapes();
+    }
 }

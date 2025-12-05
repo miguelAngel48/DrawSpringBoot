@@ -14,10 +14,11 @@ const user = document.querySelector('#user');
 const log = document.querySelector('#log');
 const logShape = document.querySelectorAll('.logsDraw');
 const saveDrawButton = document.querySelector('#buttonSaveDraw');
-const nameDraw = document.querySelector('#nameDraw');
+const nameDraw = document.querySelector('#drawName');
 const back = document.querySelector("#comeback");
 const forward = document.querySelector("#forward");
 const idUser = document.querySelector('#id');
+const idDraw = document.querySelector('#idDraw').value;
 const keyToShapeValue = {
     'a': 'touch',
     's': 'pencil',
@@ -38,14 +39,17 @@ document.addEventListener('keydown', (event) => {
 });
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
-let drawId = null;
+let idOfDraw = null;
 let shapes = [];
 let isDrawing = false;
 let drawLine = [];
 let comeBackShapes = [];
 let dateLocal = new Date();
-let currentDrawId = 0;
+let currentDrawId = idDraw || 0;
 let publico = 0;
+let isDragging = false;
+let lastShapeCount = 0;       
+let shapesLoaded = false;  
 
 color.addEventListener("input", e => {
     if (selectedShape) {
@@ -57,7 +61,7 @@ color.addEventListener("input", e => {
 
 size.addEventListener("input", e => {
     if (selectedShape) {
-        selectedShape.size = parseInt(e.target.value*2);
+        selectedShape.size = parseInt(e.target.value * 2);
         redrawAll();
     }
 });
@@ -146,8 +150,8 @@ log.addEventListener('click', (e) => {
 
 function saveShapes() {
 
-    const keyBase = (drawId)
-        ? `canvas-shapes-${user.textContent}-${drawId}`
+    const keyBase = (idOfDraw)
+        ? `canvas-shapes-${user.textContent}-${idOfDraw}`
         : `canvas-shapes-${user.textContent}-draft`;
     localStorage.setItem(`${keyBase}`, JSON.stringify(shapes));
     localStorage.setItem(`${keyBase}-returnShapes`, JSON.stringify(comeBackShapes));
@@ -161,8 +165,8 @@ function getLog(id, typeShape, color) {
     log.innerHTML += `<div class="logsDraw" id="shape${id - 1}">Num: ${id} ${typeShape}<span class="color-box" style="background:${color};"></span></div>`
 }
 function loadShapes() {
-    const keyBase = (drawId)
-        ? `canvas-shapes-${user.textContent}-${drawId}`
+    const keyBase = (idOfDraw)
+        ? `canvas-shapes-${user.textContent}-${idOfDraw}`
         : `canvas-shapes-${user.textContent}-draft`;
     const saved = localStorage.getItem(`${keyBase}`);
     const savedReturn = localStorage.getItem(`${keyBase}-returnShapes`);
@@ -209,58 +213,27 @@ function redrawAll() {
         }
     });
 }
-window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    drawId = params.get('id');
-    const drawName = params.get('drawName');
-    const dateServer = params.get('dateServer');
-    const keyBase = (drawId)
-        ? `canvas-shapes-${user.textContent}-${drawId}`
-        : `canvas-shapes-${user.textContent}-draft`;
-    const dateLocal = JSON.parse(localStorage.getItem(`${keyBase}-returnDate`));
-    const dateLocalFormat = parseCustomDate(dateLocal);
-    const widthServ = params.get('width');
-    const heightServ = params.get('height');
-    if (!drawId) {
-        askCanvasSize();
-    } else {
-        if (widthServ) canvas.width = parseInt(widthServ);
-        if (heightServ) canvas.height = parseInt(heightServ);
-        log.style.height = heightServ + "px";
+window.addEventListener('DOMContentLoaded', () => { loadDataFromServer(), markShapesAsLoaded()})
+function loadDataFromServer() {
+    let shapeBody = document.querySelector('#drawData').value;
 
+
+    const height = parseInt(document.querySelector('#height').value);
+    const width = parseInt(document.querySelector('#width').value);
+    if (!idDraw || parseInt(idDraw) <= 0) {
+        askCanvasSizeAndSave();
+        return
     }
 
-    if (drawId && dateServer && (!dateLocalFormat || dateServer > dateLocalFormat)) {
-        fetch(`/getdraw?id=${drawId}&drawName=${drawName}&dateServer=${dateServer}$width=${widthServ}$height=${heightServ}`)
-            .then(resp => {
-                if (!resp.ok) throw new Error(`Error loading the draw: ${resp.status}`);
-                return resp.text();
-            })
-            .then(resp => {
+    console.log(shapeBody);
 
-                try {
-                    shapes = JSON.parse(resp);
-                    redrawAll();
-
-                    const nameFromUrl = params.get('drawName');
-                    nameDrawBack(nameFromUrl);
-                } catch (e) {
-                    console.error(" Error caching the shapes", e);
-                }
-            })
-            .catch(err => {
-                console.error(" Error loading the draw from the server:", err);
-            });
-    } else {
-        const nameFromUrl = params.get('drawName');
-        nameDrawBack(nameFromUrl);
-        loadShapes();
-    }
-});
-
-function nameDrawBack(nameDrawB) {
-    if (nameDrawB) return nameDraw.value = nameDrawB;
+    canvas.width = width
+    canvas.height = height
+    shapes = JSON.parse(shapeBody)
+    redrawAll()
+    log.style.height = height + "px"
 }
+
 function drawPencil(drawLine, color, stroke) {
     if (!drawLine || drawLine.length < 1) {
         return;
@@ -294,8 +267,8 @@ function changePen() {
             element.style.display = 'inline-block';
         });
     }
-    const keyBase = (drawId)
-        ? `canvas-shapes-${user.textContent}-${drawId}`
+    const keyBase = (idOfDraw)
+        ? `canvas-shapes-${user.textContent}-${idOfDraw}`
         : `canvas-shapes-${user.textContent}-draft`;
     localStorage.setItem(`${keyBase}-returnConfiguration`,
         JSON.stringify(configuration(color.value, shape.value, size.value, fill.checked, strokeShape.value)));
@@ -305,8 +278,8 @@ function changePen() {
 clearDraw.addEventListener('click', () => { clearAll() });
 
 function clearAll() {
-    const keyBase = (drawId)
-        ? `canvas-shapes-${user.textContent}-${drawId}`
+    const keyBase = (idOfDraw)
+        ? `canvas-shapes-${user.textContent}-${idOfDraw}`
         : `canvas-shapes-${user.textContent}-draft`;
     shapes = [];
     localStorage.removeItem(`${keyBase}`);
@@ -508,83 +481,64 @@ canvas.addEventListener('click', (event) => {
     }
 });
 
-if (saveDrawButton) {
-    saveDrawButton.addEventListener('click', saveShapesToServer);
+   
+
+function markShapesAsLoaded() {
+    lastShapeCount = shapes.length; 
+    shapesLoaded = true;         
 }
 
-document.getElementById('buttonSaveDraw').addEventListener('click', saveShapesToServer);
 
-//function saveShapesToServer() {
-    // const jsonPayload = JSON.stringify(shapes);
-    // const userName = user.textContent.trim();
-    // const drawName = nameDraw.value.trim() || nombreAleatorio();
-    // const url = `/lienzo?user=${encodeURIComponent(userName)}&drawName=${encodeURIComponent(drawName)}`;
-    // fetch(url, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: jsonPayload
-    // })
-    //     .then(result => {
-    //         if (!result.ok) {
-               
-    //             throw new Error(`Error HTTP ${result.status}: ${result.statusText}`);
-    //         }
-    //         return result.text(); 
-    //     })
-       
-    //     .then(responseText => {
-        //     console.log("Respuesta del servidor:", responseText); 
+setInterval(() => {
+    if (!shapesLoaded) return; 
+    const currentCount = shapes.length;
+    if (Math.abs(currentCount - lastShapeCount) >= 2 && currentCount !== 0) {
+        saveShapesToServer();
+        lastShapeCount = currentCount;
+    }
+}, 2000);
 
-        // })
-        // .catch(error => {
-        //     console.error("Error al guardar el dibujo:", error);
-        // });
-//}
-function saveShapesToServer() {
+window.addEventListener("beforeunload", () => {
+    if (shapesLoaded) {
+        saveShapesToServer();
+    }
+});
+
+function saveShapesToServer(redirigir = false) {
     const jsonShapes = JSON.stringify(shapes);
-    const drawName = nameDraw.value || nombreAleatorio();
-    let width = canvas.width
-    let height = canvas.height
+    const drawNameVal = nameDraw.value || nombreAleatorio();
+    const width = canvas.width;
+    const height = canvas.height;
+    console.log(drawNameVal)
     const fetchData = {
         id: currentDrawId,
         jsonShapes: jsonShapes,
-        drawName: drawName,
+        drawName: drawNameVal,
         idUser: idUser.textContent,
         width: width,
-        height: height, 
+        height: height,
         trash: false,
         publico: false
-    }
-    console.log(fetchData)
-    const url = `/lienzo/save`;
-    fetch(url,{
-         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }, body: JSON.stringify(fetchData)  
+    };
+
+    fetch("/lienzo/save", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fetchData)
     })
-    .then(resp =>{
-        if(resp.ok){
-           let prueba = resp.json();
-            console.log(prueba)
-           return prueba
-           
-        } 
-    }).then(returnedId =>{
-        console.log(returnedId)
-        if(returnedId > 0){
-            currentDrawId = returnedId;
-            console.log(`Guardado automático exitoso. ID del dibujo: ${currentDrawId}`);
+        .then(resp => resp.json())
+        .then(returnedId => {
+            if (returnedId > 0) {
+                currentDrawId = returnedId;
+
+                if (redirigir) {
+                    window.location.href = `/lienzo/get/${returnedId}`;
+                }
             }
-    })
-    .catch(e =>{
-        console.e("Error", e);
-    })
-
-
+        })
+        .catch(e => console.error("Error saving the draw:", e));
 }
+
 function nombreAleatorio() {
     const fruta = [
         'banana', 'pera', 'manzana', 'kiwi', 'pomelo', 'sandia', 'melon', 'cereza',
@@ -596,7 +550,7 @@ function nombreAleatorio() {
         'brillante', 'misterioso', 'dulce', 'oscuro', 'silvestre', 'gigante',
         'diminuto', 'transparente', 'silencioso', 'soñador', 'antiguo', 'moderno',
         'fresco', 'salada', 'audaz', 'juguetón'
-    ]; 
+    ];
     const indexFruta = Math.floor(Math.random() * fruta.length);
     const indexadjetivo = Math.floor(Math.random() * adjetivo.length);
     let nameRandom = fruta[indexFruta] + ' ' + adjetivo[indexadjetivo];
@@ -833,13 +787,14 @@ function parseCustomDate(dateStr) {
     return new Date(year, month - 1, day, hours, minutes, seconds);
 }
 
-function askCanvasSize() {
+function askCanvasSizeAndSave() {
     const modal = document.getElementById("sizeModal");
     const widthInput = document.getElementById("modalWidth");
     const heightInput = document.getElementById("modalHeight");
     const applyBtn = document.getElementById("applySize");
     const errorWidth = document.getElementById("errorWidth");
     const errorHeight = document.getElementById("errorHeight");
+
     modal.style.display = "block";
 
     applyBtn.onclick = () => {
@@ -847,23 +802,25 @@ function askCanvasSize() {
         let height = parseInt(heightInput.value);
 
         if (width < 100 || width > 2000) {
-            errorWidth.innerHTML = "Width must be between 100 and 2000 px.";
+            errorWidth.textContent = "Width must be between 100 and 2000 px.";
             return;
-        } else {
-            errorWidth.innerHTML = "";
         }
+        errorWidth.textContent = "";
 
         if (height < 100 || height > 2000) {
-            errorHeight.innerHTML = "Height must be between 100 and 2000 px.";
+            errorHeight.textContent = "Height must be between 100 and 2000 px.";
             return;
-        } else {
-            errorHeight.innerHTML = "";
         }
+        errorHeight.textContent = "";
 
+        // Aplicar tamaño al canvas
         canvas.width = width;
         canvas.height = height;
         log.style.height = height + "px";
 
         modal.style.display = "none";
+
+        // Guardar automáticamente en el servidor
+        saveShapesToServer(true); // <-- indicador de primer guardado
     };
 }

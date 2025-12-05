@@ -40,7 +40,7 @@
         <th th:text="${draw.height}+ 'px'"></th>
         <th>
             <a th:if="${user == draw.name}"
-               th:href="@{/lienzo(id=${draw.id}, drawName=${draw.drawName}, dateServer=${draw.DateCreate}, width=${draw.width}, height=${draw.height})}">
+                th:href="@{'/lienzo/get/'+ ${draw.id}}">Editar
                 redraw
             </a>
 

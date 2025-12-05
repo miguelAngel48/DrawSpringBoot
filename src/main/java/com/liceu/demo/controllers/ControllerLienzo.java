@@ -1,10 +1,12 @@
 package com.liceu.demo.controllers;
 
 import com.liceu.demo.dto.CanvasClientDTO;
+import com.liceu.demo.dto.DateGaleryDTO;
 import com.liceu.demo.models.Draw;
 import com.liceu.demo.services.DrawServices;
 import com.liceu.demo.services.ShapeServices;
 import com.liceu.demo.services.VersionDrawServices;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ public class ControllerLienzo {
     VersionDrawServices versionDrawServices;
     @Autowired
     ShapeServices shapeServices;
+    @Autowired
+    HttpSession session;
 
     @PostMapping("/save")
     public ResponseEntity<Integer> saveDraw(Model model, @RequestBody CanvasClientDTO fetchData) {
@@ -31,9 +35,17 @@ public class ControllerLienzo {
         return ResponseEntity.ok(draw.getId());
     }
 
-    @GetMapping("get")
-    public String getDrawTemplate(Model model){
-        return "get";
+    @GetMapping("/get/{id}")
+    public String getDraw(@PathVariable int id, Model model){
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("id",session.getAttribute("id"));
+        DateGaleryDTO dto = drawServices.getCanvasDTO(id);
+        model.addAttribute("drawData",dto.jsonShapes());
+        model.addAttribute("drawName",dto.drawName());
+        model.addAttribute("idDraw",dto.id());
+        model.addAttribute("width",dto.width());
+        model.addAttribute("height",dto.height());
+        return "lienzo";
     }
 
 }

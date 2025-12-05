@@ -23,11 +23,16 @@
 </header>
 
 <main>
-    <div>
-        <h1>draw.name</h1>
+    <div id="coverCanvas">
+      <input type="text" id="drawName" name="drawName"
+       th:value="${drawName}"
+       placeholder="Name of Draw">
+       <div id="closeLogtoDraw">
     <canvas id="lienzo"></canvas>
+     <aside id="log"></aside>
+     </div>
     </div>
-    <aside id="log"></aside>
+   
 </main>
 
 <table>
@@ -73,23 +78,14 @@
         <th><label for="stroke">Stroke: </label></th>
         <th><input type="range" name="stroke" id="stroke"></th>
     </tr>
-
-    <!-- <form th:action="@{/galery}" method="post"> -->
+          
         <tr>
-            <th>
-                <input type="text" name="nameDraw" id="nameDraw" placeholder="Name of Draw:">
-            </th>
-            <th>
-                <input type="submit" id="buttonSaveDraw" name="Save">
-            </th>
-        </tr>
-<!-- 
-        <tr>
-            <th><input type="hidden" name="bodyShape" id="bodyShapesInput"></th>
-            <th><input type="hidden" name="userinput" id="userinput"></th>
-            <th><input type="hidden" name="canvasSizeInput" id="canvasSizeInput"></th>
-        </tr> -->
-    <!-- </form> -->
+            <th><input type="hidden" id="drawData" th:value="${drawData}"></th>
+            <th><input type="hidden" id="idDraw" th:value="${idDraw}"></th>
+            <th><input type="hidden" id="height" th:value="${height}"></th>
+            <th><input type="hidden" id="width" th:value="${width}"></th>
+        </tr> 
+    
 
 </table>
 
@@ -109,7 +105,6 @@
         <button id="applySize">Create canvas</button>
     </div>
 </div>
-
 <script th:src="@{/scripts/draw.js}"></script>
 
 </body>

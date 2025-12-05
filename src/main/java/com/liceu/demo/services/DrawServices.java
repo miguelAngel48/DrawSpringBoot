@@ -1,11 +1,15 @@
 package com.liceu.demo.services;
 
 import com.liceu.demo.dao.DrawDAO;
+import com.liceu.demo.dao.ShapesDAO;
 import com.liceu.demo.dao.UserDAO;
+import com.liceu.demo.dao.VersionDAO;
 import com.liceu.demo.dto.CanvasClientDTO;
 import com.liceu.demo.dto.DateGaleryDTO;
 import com.liceu.demo.models.Draw;
+import com.liceu.demo.models.Shape;
 import com.liceu.demo.models.User;
+import com.liceu.demo.models.VersionDraw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,10 @@ public class DrawServices {
     DrawDAO drawDAO;
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    VersionDAO versionDAO;
+    @Autowired
+    ShapeServices shapeServices;
 
     public Draw saveDrawOnDataBase(int id, String nameDraw, int idUser, int width, int height, boolean trash, boolean publico) {
         Draw draw = new Draw();
@@ -55,7 +63,9 @@ public List<DateGaleryDTO> getPublicDraws(){
     private DateGaleryDTO transformDrawToDTO(Draw draw) {
          User u = userDAO.getUserById(draw.getIdUser());
         String userName = u.getUsername();
-        String jsonShapesData = "";
+        VersionDraw versionDraw = versionDAO.getVersionForId(draw.getId());
+
+        String jsonShapesData = shapeServices.getShapes(versionDraw.getVersionId());
         DateGaleryDTO dto = new DateGaleryDTO(
                 draw.getId(),
                 jsonShapesData,
@@ -71,4 +81,13 @@ public List<DateGaleryDTO> getPublicDraws(){
 
         return dto;
     }
+
+    public DateGaleryDTO getCanvasDTO(int id) {
+
+       Draw d = drawDAO.getDrawForId(id);
+       return  transformDrawToDTO(d);
+
+    }
+
+
 }

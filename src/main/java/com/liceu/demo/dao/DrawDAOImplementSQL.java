@@ -39,7 +39,7 @@ public class DrawDAOImplementSQL implements DrawDAO {
             updateDraw(draw);
             return draw.getId();
         } else {
-            int trashValue = draw.isTrash() ? 1 : 0;
+//            int trashValue = draw.isTrash() ? 1 : 0;
             String sql = "INSERT INTO draw(NameDraw,idUser,width,height,trash,publico) VALUES(?,?,?,?,?,?)";
 //            jdbcTemplate.update("INSERT INTO draw(NameDraw,idUser,width,height,trash) VALUES(?,?,?,?,?)",
 //                    draw.getNameDraw(), draw.getIdUser(), draw.getWidth(), draw.getHeight(), trashValue);
@@ -85,13 +85,14 @@ public class DrawDAOImplementSQL implements DrawDAO {
 
     public void updateDraw(Draw draw) {
         int trashValue = draw.isTrash() ? 1 : 0;
-        jdbcTemplate.update("UPDATE draw SET NameDraw = ?, idUser = ?, width = ?, height = ?, trash = ? WHERE id = ?",
+        jdbcTemplate.update("UPDATE draw SET NameDraw = ?, idUser = ?, width = ?, height = ?, trash = ?,publico = ? WHERE id = ?",
                 draw.getNameDraw()
                 , draw.getIdUser()
                 , draw.getWidth()
                 , draw.getHeight()
                 , trashValue
                 , draw.getId()
+                ,draw.isPublico()
         );
 
 
@@ -107,7 +108,7 @@ public class DrawDAOImplementSQL implements DrawDAO {
             return -1;
         }
     }
-
+    @Override
     public Draw getDrawForId(int id) {
         String sql = "SELECT * From draw WHERE id = ?";
         Draw d = new Draw();

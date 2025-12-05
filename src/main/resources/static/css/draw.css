@@ -5,6 +5,7 @@ canvas {
 }
 
 :root {
+     --primary-color:rgba(5, 2, 36, 0.947);
     --background-Color-items: rgba(5, 2, 36, 0.947);
     --background-Color-navbar: rgba(13, 5, 104, 0.832);
 }
@@ -186,4 +187,22 @@ section{
     color: red;
     font-size: 14px;
     min-height: 18px;
+}
+#coverCanvas{
+display: flex;
+flex-direction: column;
+}
+#closeLogtoDraw{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+#drawName{
+    padding-left: 1%;
+    width: 70%;
+    border: none;
+    background-color: transparent;
+    outline: none;
 }
