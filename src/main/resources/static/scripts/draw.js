@@ -50,6 +50,7 @@ let publico = 0;
 let isDragging = false;
 let lastShapeCount = 0;       
 let shapesLoaded = false;  
+let lastSavedShapes = [];
 
 color.addEventListener("input", e => {
     if (selectedShape) {
@@ -259,12 +260,14 @@ function changePen() {
     if (shape.value === 'pencil') {
 
         notForPencil.forEach(element => {
-            element.style.display = 'none';
+            element.style.opacity = 0.5;
+            element.disabled = true
 
         });
     } else {
         notForPencil.forEach(element => {
-            element.style.display = 'inline-block';
+             element.style.opacity = 1;
+            element.disabled = false
         });
     }
     const keyBase = (idOfDraw)
@@ -484,22 +487,29 @@ canvas.addEventListener('click', (event) => {
    
 
 function markShapesAsLoaded() {
-    lastShapeCount = shapes.length; 
-    shapesLoaded = true;         
+    lastSavedShapes = JSON.stringify(shapes);
+    lastShapeCount = shapes.length;
+    shapesLoaded = true;
 }
 
 
 setInterval(() => {
-    if (!shapesLoaded) return; 
-    const currentCount = shapes.length;
-    if (Math.abs(currentCount - lastShapeCount) >= 2 && currentCount !== 0) {
+    if (!shapesLoaded) return;
+
+    const currentShapesJSON = JSON.stringify(shapes);
+    if (currentShapesJSON !== lastSavedShapes && lastSavedShapes !== 0) {
         saveShapesToServer();
-        lastShapeCount = currentCount;
+        lastSavedShapes = currentShapesJSON;
+        lastShapeCount = shapes.length;
     }
 }, 2000);
 
-window.addEventListener("beforeunload", () => {
-    if (shapesLoaded) {
+
+window.addEventListener("beforeunload", (event) => {
+    if (!shapesLoaded) return;
+
+    const currentShapesJSON = JSON.stringify(shapes);
+    if (currentShapesJSON !== lastSavedShapes) {
         saveShapesToServer();
     }
 });

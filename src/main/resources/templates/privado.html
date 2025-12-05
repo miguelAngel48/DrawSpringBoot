@@ -24,7 +24,7 @@
 
     </tr>
     <tr>
-
+        <th>Preview</th>
         <th>ID</th>
         <th>Draw name</th>
         <th>creation date</th>
@@ -32,12 +32,16 @@
         <th>height</th>
     </tr>
 
-    <tr th:each="draw : ${draws}">
+    <tr th:each="draw : ${draws}" class="unitsGalery">
+        <th><canvas class="drawsPreview" width="80" height="80"></canvas>
+        <input type="hidden" name="shapesPreview" class="shapesPreview" th:value="${draw.jsonShapes}">
+    </th>
         <th th:text="${draw.id}"></th>
         <th th:text="${draw.drawName}"></th>
         <th th:text="${draw.DateCreate}"></th>
         <th th:text="${draw.width}+ 'px'"></th>
         <th th:text="${draw.height}+ 'px'"></th>
+        
         <th>
             <a th:if="${user == draw.name}"
                 th:href="@{'/lienzo/get/'+ ${draw.id}}">Editar
@@ -52,5 +56,6 @@
 
     </tr>
 </table>
+<script th:src="@{/scripts/galery.js}"></script>
 </body>
 </html>

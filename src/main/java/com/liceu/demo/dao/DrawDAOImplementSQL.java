@@ -91,10 +91,10 @@ public class DrawDAOImplementSQL implements DrawDAO {
                 , draw.getWidth()
                 , draw.getHeight()
                 , trashValue
-                , draw.getId()
                 ,draw.isPublico()
+                ,draw.getId()
         );
-
+        System.out.println("nombre del dibujo desde el DAO  " + draw.getNameDraw());
 
     }
 

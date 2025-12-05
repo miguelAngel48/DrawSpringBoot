@@ -27,6 +27,7 @@
 
     </tr>
         <tr>
+            <th>Preview</th>
             <th>User</th>
             <th>ID</th>
             <th>Draw name</th>
@@ -36,7 +37,10 @@
            
         </tr>
 
-        <tr th:each="draw : ${draws}">
+        <tr th:each="draw : ${draws}" class="unitsGalery">
+             <th><canvas class="drawsPreview" width="80" height="80"></canvas>
+        <input type="hidden" name="shapesPreview" class="shapesPreview" th:value="${draw.jsonShapes}">
+             </th>
             <th th:text="${draw.name}"></th>
             <th th:text="${draw.id}"></th>
             <th th:text="${draw.drawName}"></th>

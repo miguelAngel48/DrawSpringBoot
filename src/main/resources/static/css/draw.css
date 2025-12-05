@@ -136,9 +136,9 @@ header {
     height: 2rem;
 }
 
-.notForPencil {
+/* .notForPencil {
     display: none;
-}
+} */
 
 section{
     display: flex;
@@ -205,4 +205,9 @@ flex-direction: column;
     border: none;
     background-color: transparent;
     outline: none;
+}
+
+.unitsGalery{
+      box-shadow: 0 8px 92px 0 rgba(31, 38, 135, 0.67);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
