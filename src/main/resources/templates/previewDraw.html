@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css">
+
+    <title>lienzo</title>
+</head>
+
+<body>
+    <header>
+        <h2>
+            <b id="id" name="id" th:text="${id}"></b> <b id="user" name="user" th:text="${user}"></b>'s Draw
+        </h2>
+        <a th:href="@{/privado}" name="galery">Private Galery</a>
+        <a th:href="@{/galery}" name="galery">Public Galery</a>
+        <a th:href="@{/lienzo}" name="draw">Draw</a>
+        <a th:href="@{/login}" name="logout">Logout</a>
+    </header>
+
+    <main>
+        <div id="coverCanvas">
+            <b type="text" id="drawName" name="drawName" th:text="${drawName}"></b>
+            <canvas id="lienzo" class="draw-preview"
+                th:attr="data-shapes=${drawData}, width=${width}, height=${height}">
+            </canvas>
+            <input type="hidden" class="shapesPreview" th:attr="data-shapes=${drawData}" th:value="${drawData}">
+        </div>
+
+    </main>
+
+    <input type="hidden" id="drawData" th:value="${drawData}">
+    <input type="hidden" id="idDraw" th:value="${idDraw}">
+    <input type="hidden" id="height" th:value="${height}">
+    <input type="hidden" id="width" th:value="${width}">
+    <script th:src="@{/scripts/galery.js}"></script>
+
+</body>
+
+</html>

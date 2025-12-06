@@ -27,11 +27,13 @@ public class VersionDAOImplementsSQL implements VersionDAO{
     public void saveVersion(VersionDraw vers) {
         jdbcTemplate.update("insert into version(drawid,versionNum) values(?,?)",vers.getDrawid(),vers.getVersionNum());
     }
+    @Override
     public int findMaxVersionNumByDrawId(int drawId) {
         String sql = "SELECT MAX(versionNum) FROM version WHERE drawId = ?";
         Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, drawId);
         return (maxVersion == null) ? 0 : maxVersion;
     }
+    @Override
     public VersionDraw getVersionForId(int drawid){
         String sql = "SELECT * \n" +
                 "FROM version \n" +
@@ -39,5 +41,14 @@ public class VersionDAOImplementsSQL implements VersionDAO{
                 "ORDER BY versionNum DESC";
         List<VersionDraw> version =  jdbcTemplate.query(sql,versionDrawRowMapper,drawid);
         return version.get(0);
+    }
+    @Override
+    public List<VersionDraw> getAllVersionForId(int drawid){
+        String sql = "SELECT * \n" +
+                "FROM version \n" +
+                "WHERE drawid = ? \n" +
+                "ORDER BY versionNum ASC";
+        List<VersionDraw> version =  jdbcTemplate.query(sql,versionDrawRowMapper,drawid);
+        return version;
     }
 }

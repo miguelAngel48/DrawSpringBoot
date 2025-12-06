@@ -1,0 +1,64 @@
+.versions-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-container {
+    width: 80vw;                 /* Máximo 80% del viewport */
+    overflow-x: auto;            /* Scroll horizontal */
+    overflow-y: hidden;          /* Ocultar cualquier overflow vertical */
+    white-space: nowrap;         /* Evita saltos de línea */
+    padding-bottom: 10px;        /* Espacio para el scroll */
+}
+
+.version-table {
+    border-collapse: collapse;
+    width: max-content;          /* Permite que se expanda horizontalmente */
+}
+
+.version-item {
+    display: inline-block;       /* Alineación horizontal */
+    vertical-align: top;
+    text-align: center;
+    padding: 10px;
+    min-width: 150px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 10px;
+    background: #f8f8f8;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.version-item:hover {
+    transform: scale(1.05);
+    background: #ffffff;
+}
+
+.version-item.active {
+    border: 2px solid #007bff;
+    background: #e7f0ff;
+}
+
+.version-canvas {
+    display: block;
+    margin: 0 auto 8px auto;
+    border: 1px solid #ddd;
+}
+
+.version-info {
+    font-size: 14px;
+}
+
+.version-number {
+     color: #1b1a1a;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.version-date {
+    font-size: 12px;
+    color: #666;
+}

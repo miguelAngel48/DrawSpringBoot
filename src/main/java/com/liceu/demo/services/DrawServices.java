@@ -45,23 +45,31 @@ public class DrawServices {
     public int getLastId() {
         return drawDAO.getDrawById();
     }
+
     public List<DateGaleryDTO> getDrawsUser(int idUser) {
         List<DateGaleryDTO> allContentGalery = new ArrayList<>();
-        for ( Draw draw :drawDAO.getDrawsUser(idUser)){
+        for (Draw draw : drawDAO.getDrawsUser(idUser)) {
             allContentGalery.add(transformDrawToDTO(draw));
         }
         return allContentGalery;
     }
-public List<DateGaleryDTO> getPublicDraws(){
-    List<DateGaleryDTO> allContentGalery = new ArrayList<>();
-    for ( Draw draw :drawDAO.getDrawsPublics()){
-        allContentGalery.add(transformDrawToDTO(draw));
-    }
-        return allContentGalery;
-}
 
+    public List<DateGaleryDTO> getPublicDraws() {
+        List<DateGaleryDTO> allContentGalery = new ArrayList<>();
+        for (Draw draw : drawDAO.getDrawsPublics()) {
+            allContentGalery.add(transformDrawToDTO(draw));
+        }
+        return allContentGalery;
+    }
+    public List<DateGaleryDTO> getDrawsDeleted(int idUser){
+        List<DateGaleryDTO> allContentGalery = new ArrayList<>();
+        for (Draw draw : drawDAO.getDrawsDeletedUser(idUser)) {
+            allContentGalery.add(transformDrawToDTO(draw));
+        }
+        return allContentGalery;
+    }
     private DateGaleryDTO transformDrawToDTO(Draw draw) {
-         User u = userDAO.getUserById(draw.getIdUser());
+        User u = userDAO.getUserById(draw.getIdUser());
         String userName = u.getUsername();
         VersionDraw versionDraw = versionDAO.getVersionForId(draw.getId());
 
@@ -76,18 +84,26 @@ public List<DateGaleryDTO> getPublicDraws(){
                 draw.isTrash(),
                 draw.isPublico(),
                 draw.getDateCreate().toString()
-
         );
-
         return dto;
     }
 
+    public void drawInTrash(int idDraw) {
+        Draw draw = drawDAO.getDrawForId(idDraw);
+           boolean trash =  !draw.isTrash();
+           drawDAO.updateStatTrash(idDraw,trash);
+    }
+    public void drawPublicated(int idDraw) {
+        Draw draw = drawDAO.getDrawForId(idDraw);
+        boolean publicated =  !draw.isPublico();
+        drawDAO.updateStatPublic(idDraw,publicated);
+    }
+public void drawDeleted(int idDraw){
+        drawDAO.deleteDraw(idDraw);
+}
     public DateGaleryDTO getCanvasDTO(int id) {
-
-       Draw d = drawDAO.getDrawForId(id);
-       return  transformDrawToDTO(d);
+        Draw d = drawDAO.getDrawForId(id);
+        return transformDrawToDTO(d);
 
     }
-
-
 }

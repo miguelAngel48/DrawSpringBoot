@@ -39,15 +39,8 @@ public class DrawDAOImplementSQL implements DrawDAO {
             updateDraw(draw);
             return draw.getId();
         } else {
-//            int trashValue = draw.isTrash() ? 1 : 0;
             String sql = "INSERT INTO draw(NameDraw,idUser,width,height,trash,publico) VALUES(?,?,?,?,?,?)";
-//            jdbcTemplate.update("INSERT INTO draw(NameDraw,idUser,width,height,trash) VALUES(?,?,?,?,?)",
-//                    draw.getNameDraw(), draw.getIdUser(), draw.getWidth(), draw.getHeight(), trashValue);
-
-//            Integer lastId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-//            return lastId != null ? lastId : 0;
             KeyHolder keyHolder = new GeneratedKeyHolder();
-
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
                         sql,
@@ -58,7 +51,7 @@ public class DrawDAOImplementSQL implements DrawDAO {
                 ps.setInt(3, draw.getWidth());
                 ps.setInt(4, draw.getHeight());
                 ps.setBoolean(5, draw.isTrash());
-                ps.setBoolean(6,draw.isPublico());
+                ps.setBoolean(6, draw.isPublico());
                 return ps;
             }, keyHolder);
 
@@ -71,18 +64,25 @@ public class DrawDAOImplementSQL implements DrawDAO {
 
     @Override
     public List<Draw> getDrawsUser(int userId) {
-        return jdbcTemplate.query("select * from draw where idUser = ?", drawRowMapper,userId);
+        return jdbcTemplate.query("select * from draw where idUser = ? and trash = 0", drawRowMapper, userId);
     }
-    public List<Draw> getDrawsPublics(){
-        return  jdbcTemplate.query("select * from draw where publico = 1", drawRowMapper);
+
+    @Override
+    public List<Draw> getDrawsDeletedUser(int userId) {
+        return jdbcTemplate.query("select * from draw where idUser = ? and trash = 1", drawRowMapper, userId);
+    }
+
+    public List<Draw> getDrawsPublics() {
+        return jdbcTemplate.query("select * from draw where publico = 1 and trash = 0", drawRowMapper);
     }
 
 
     @Override
-    public void deleteDraw(String user, int idUser) {
-
+    public void deleteDraw(int idDraw) {
+    jdbcTemplate.update("DELETE FROM draw WHERE id = ?",idDraw);
     }
 
+    @Override
     public void updateDraw(Draw draw) {
         int trashValue = draw.isTrash() ? 1 : 0;
         jdbcTemplate.update("UPDATE draw SET NameDraw = ?, idUser = ?, width = ?, height = ?, trash = ?,publico = ? WHERE id = ?",
@@ -91,11 +91,18 @@ public class DrawDAOImplementSQL implements DrawDAO {
                 , draw.getWidth()
                 , draw.getHeight()
                 , trashValue
-                ,draw.isPublico()
-                ,draw.getId()
+                , draw.isPublico()
+                , draw.getId()
         );
-        System.out.println("nombre del dibujo desde el DAO  " + draw.getNameDraw());
 
+    }
+
+    @Override
+    public void updateStatTrash(int idDraw, boolean trash) {
+        jdbcTemplate.update("UPDATE draw SET trash = ? WHERE id = ?", trash, idDraw);
+    }
+    public void updateStatPublic(int idDraw, boolean publico){
+        jdbcTemplate.update("UPDATE draw SET publico = ? WHERE id = ?", publico, idDraw);
     }
 
     @Override
@@ -108,6 +115,7 @@ public class DrawDAOImplementSQL implements DrawDAO {
             return -1;
         }
     }
+
     @Override
     public Draw getDrawForId(int id) {
         String sql = "SELECT * From draw WHERE id = ?";

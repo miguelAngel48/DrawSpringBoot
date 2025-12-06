@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -30,6 +32,35 @@ public class ControllerGalery {
         model.addAttribute("draws",allPublicsDraws);
         return "galery";
     }
+    @PostMapping("/delete")
+    public String deleteDraw(@RequestParam int id){
+        drawServices.drawInTrash(id);
+        return "redirect:/privado";
+    }
+    @PostMapping("/trash")
+    public String deleteDrawPermanent(Model model,@RequestParam int id){
+        drawServices.drawDeleted(id);
+        return "redirect:/trash";
+    }
+    @PostMapping("publicated")
+    public String PublicateDraws(@RequestParam int id){
+        drawServices.drawPublicated(id);
+        return "redirect:/privado";
+    }
+    @PostMapping("/outTrash")
+    public String getOutDrawOfTheTrash(@RequestParam int id){
+        drawServices.drawInTrash(id);
+        return "redirect:/trash";
+    }
+    @GetMapping("/trash")
+    public String deletePage(Model model){
+        session.getAttribute("id");
+        model.addAttribute("user", session.getAttribute("user"));
+        int idUser = (int) session.getAttribute("id");
+        List<DateGaleryDTO> allUsersDraws = drawServices.getDrawsDeleted(idUser);
+        model.addAttribute("draws",allUsersDraws);
+        return "trash";
+    }
     @GetMapping("/privado")
     public String privado(Model model){
         model.addAttribute("user", session.getAttribute("user"));
@@ -41,9 +72,9 @@ public class ControllerGalery {
 
     @GetMapping("/lienzo")
     public String draw(Model model) {
+        session.getAttribute("id");
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("id",session.getAttribute("id"));
-        session.getAttribute("id");
         return "lienzo";
     }
 

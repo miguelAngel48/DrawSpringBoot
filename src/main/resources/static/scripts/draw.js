@@ -226,8 +226,6 @@ function loadDataFromServer() {
         return
     }
 
-    console.log(shapeBody);
-
     canvas.width = width
     canvas.height = height
     shapes = JSON.parse(shapeBody)
@@ -834,3 +832,32 @@ function askCanvasSizeAndSave() {
         saveShapesToServer(true); // <-- indicador de primer guardado
     };
 }
+
+document.addEventListener("click", function (e) {
+    const versionItem = e.target.closest(".version-item");
+    if (!versionItem) return;
+
+    // 1. Obtener JSON de figuras
+    const shapesRaw = versionItem.getAttribute("data-shapes");
+    if (!shapesRaw) return;
+
+    let loadedShapes;
+    try {
+        loadedShapes = JSON.parse(shapesRaw);
+    } catch (err) {
+        console.error("Error parsing shapes JSON:", err);
+        return;
+    }
+
+   
+    shapes = loadedShapes;
+    comeBackShapes = [];
+    selectedShape = null;
+
+    redrawAll();
+
+   saveShapesToServer(false);
+    
+
+    console.log("Versión cargada en el lienzo principal.");
+});

@@ -34,7 +34,8 @@ public class DrawPracticaApplication  implements WebMvcConfigurer {
 		registry.addInterceptor(sessionInterceptor)
 				.addPathPatterns("/galery")
 				.addPathPatterns("/lienzo/**")
-				.addPathPatterns("/privado");
+				.addPathPatterns("/privado")
+				.addPathPatterns("/trash");
 
 
 	}

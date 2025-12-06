@@ -17,6 +17,7 @@ body {
 }
 
 table {
+    text-align: center;
     margin-top: 1rem;
     padding: 3rem;
     background: rgba(255, 255, 255, 0.1);
@@ -136,9 +137,6 @@ header {
     height: 2rem;
 }
 
-/* .notForPencil {
-    display: none;
-} */
 
 section{
     display: flex;

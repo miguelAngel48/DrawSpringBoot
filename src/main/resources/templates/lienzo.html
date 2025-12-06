@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/versions.css}" type="text/css">
 
     <title>lienzo</title>
 </head>
@@ -22,13 +23,48 @@
     <a th:href="@{/login}" name="logout">Logout</a>
 </header>
 
+<div class="versions-section">
+    <h3 class="versions-title">Versiones guardadas</h3>
+    
+    <div class="table-container">
+        <table class="version-table">
+            <tr>
+                <!-- Versión actual -->
+                <th class="version-item active" 
+                    data-version-id="current" 
+                    th:data-shapes="${drawData}">
+                    <canvas class="version-canvas" width="100" height="100"></canvas>
+                    <div class="version-info">
+                        <div class="version-number">Versión actual</div>
+                        <div class="version-date">
+                            [[${#dates.format(new java.util.Date(), 'dd/MM/yyyy HH:mm')}]]
+                        </div>
+                    </div>
+                </th>
+                
+                <!-- Versiones del historial -->
+                <th th:each="version : ${versions}" 
+                    class="version-item"
+                    th:data-version-id="${version.versionId}" 
+                    th:data-shapes="${version.shapes}">
+                    <canvas class="version-canvas" width="100" height="100"></canvas>
+                    <div class="version-info">
+                        <div class="version-number" th:text="'Versión ' + ${version.versionNum}"></div>
+                        <div class="version-date" th:text="${version.dateUpdate}"></div>
+                    </div>
+                </th>
+            </tr>
+        </table>
+    </div>
+</div>
+
 <main>
     <div id="coverCanvas">
       <input type="text" id="drawName" name="drawName"
        th:value="${drawName}"
        placeholder="Name of Draw">
        <div id="closeLogtoDraw">
-    <canvas id="lienzo"></canvas>
+    <canvas id="lienzo" class="draw-preview"></canvas>
      <aside id="log"></aside>
      </div>
     </div>
@@ -105,7 +141,9 @@
         <button id="applySize">Create canvas</button>
     </div>
 </div>
+<script th:src="@{/scripts/galery.js}"></script>
 <script th:src="@{/scripts/draw.js}"></script>
+
 
 </body>
 </html>

@@ -9,11 +9,19 @@ public interface DrawDAO {
 
     List<Draw> getDrawsUser(int idUser);
 
-    void deleteDraw(String user, int idUser);
+    void deleteDraw(int idDraw);
 
     int getDrawById();
 
     List<Draw> getDrawsPublics();
 
     public Draw getDrawForId(int id);
+
+    public List<Draw> getDrawsDeletedUser(int userId);
+
+    public void updateDraw(Draw draw);
+
+    public void updateStatTrash(int idDraw, boolean trash);
+
+    public void updateStatPublic(int idDraw, boolean trash);
 }

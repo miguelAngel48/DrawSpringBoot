@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css" />
     <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css" />
     <meta charset="UTF-8">
-    <title>privado</title>
+    <title>trash</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
         <tr>
 
             <th id="ownGalery" th:text="'galery of '+ ${user}" colspan="6"></th>
-            <th><a th:href="@{/trash}" name="trash">Deleted Drawings</a></th>
+            <th><a th:href="@{/privado}" name="privado">comeback to the galery</a></th>
         </tr>
         <tr>
             <th>Preview</th>
@@ -46,35 +46,16 @@
             <th th:text="${draw.height}+ 'px'"></th>
 
             <th>
-                <a th:if="${user == draw.name}" th:href="@{'/lienzo/get/'+ ${draw.id}}">Editar
-                    redraw
+                <form action="/outTrash" method="post">
+                    <input type="hidden" name="id" th:value="${draw.id}">
+                    <button type="submit"><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11 15L9 13M9 13L11 11M9 13H13C14.1046 13 15 13.8954 15 15V16M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M4 6H20M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></button>
+                </form>
                 </a>
             </th>
             <th>
-                <form action="/publicated" method="post">
-                    <input type="hidden" name="id" th:value="${draw.id}">
-                    <button type="submit"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M16.719 19.7519L16.0785 14.6279C15.8908 13.1266 14.6146 12 13.1017 12H12H10.8983C9.38538 12 8.10917 13.1266 7.92151 14.6279L7.28101 19.7519C7.1318 20.9456 8.06257 22 9.26556 22H12H14.7344C15.9374 22 16.8682 20.9456 16.719 19.7519Z"
-                                stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            </path>
-                            <circle cx="12" cy="5" r="3" stroke="#ffffff" stroke-width="2"></circle>
-                            <circle cx="4" cy="9" r="2" stroke="#ffffff" stroke-width="2"></circle>
-                            <circle cx="20" cy="9" r="2" stroke="#ffffff" stroke-width="2"></circle>
-                            <path
-                                d="M4 14H3.69425C2.71658 14 1.8822 14.7068 1.72147 15.6712L1.38813 17.6712C1.18496 18.8903 2.12504 20 3.36092 20H7"
-                                stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            </path>
-                            <path
-                                d="M20 14H20.3057C21.2834 14 22.1178 14.7068 22.2785 15.6712L22.6119 17.6712C22.815 18.8903 21.8751 20 20.6392 20C19.4775 20 18.0952 20 17 20"
-                                stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            </path>
-                        </svg></button>
-                </form>
-            </th>
-            <th>
-                <form action="/delete" method="post">
+                <form action="/trash" method="post">
                     <input type="hidden" name="id" th:value="${draw.id}">
                     <button type="submit"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
