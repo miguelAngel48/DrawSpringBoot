@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/comon.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/draw.css}" type="text/css" />
+    <title>404 - No encontrado</title>
+</head>
+<body>
+<h1>404 - Recurso no encontrado</h1>
+
+<p th:text="${message}">
+    El dibujo solicitado no existe
+</p>
+
+<a th:href="@{/privado}">Volver a la galeria</a>
+</body>
+</html>

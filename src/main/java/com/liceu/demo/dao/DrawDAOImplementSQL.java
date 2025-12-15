@@ -1,6 +1,7 @@
 package com.liceu.demo.dao;
 
 import com.liceu.demo.models.Draw;
+import com.liceu.demo.models.Share;
 import com.liceu.demo.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -106,21 +107,73 @@ public class DrawDAOImplementSQL implements DrawDAO {
     }
 
     @Override
-    public int getDrawById() {
-        try {
-            String sql = "SELECT id FROM draw ORDER BY id DESC LIMIT 1";
-            Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
-            return result.intValue();
-        } catch (Exception e) {
-            return -1;
-        }
+    public Draw getDrawById(int idDraw) {
+          return jdbcTemplate.queryForObject("SELECT * FROM draw WHERE id = ?", drawRowMapper,idDraw);
     }
 
     @Override
     public Draw getDrawForId(int id) {
-        String sql = "SELECT * From draw WHERE id = ?";
-        Draw d = new Draw();
+        String sql = "SELECT * FROM draw WHERE id = ?";
         List<Draw> draws = jdbcTemplate.query(sql, drawRowMapper, id);
-        return draws.get(0);
+        return draws.isEmpty() ? null : draws.get(0);
     }
+    @Override
+    public void saveShare(int idDraw, int idUser, Share.SharePermission permission) {
+        jdbcTemplate.update(
+                "INSERT INTO share(drawId, userId, permiso) VALUES (?, ?, ?) " +
+                        "ON DUPLICATE KEY UPDATE permiso = VALUES(permiso)",
+                idDraw, idUser, permission.name()
+        );
+    }
+    @Override
+    public List<Share> findSharedByUser(int ownerId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM share s JOIN draw d ON s.drawId = d.id WHERE d.userId = ?",
+                (rs, row) -> {
+                    Share s = new Share();
+                    s.setDrawId(rs.getInt("drawId"));
+                    s.setUserId(rs.getInt("userId"));
+                    s.setPermission(Share.SharePermission.valueOf(rs.getString("permiso")));
+                    return s;
+                },
+                ownerId
+        );
+    }
+
+
+    public List<Share> findSharedWithUser(int userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM share WHERE userId = ?",
+                (rs, row) -> {
+                    Share s = new Share();
+                    s.setDrawId(rs.getInt("drawId"));
+                    s.setUserId(rs.getInt("userId"));
+                    s.setPermission(Share.SharePermission.valueOf(rs.getString("permiso")));
+                    return s;
+                },
+                userId
+        );
+    }
+    @Override
+    public boolean isDrawSharedWithUser(int drawId, int userId) {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM share WHERE drawId = ? AND userId = ?",
+                Integer.class,
+                drawId,
+                userId
+        );
+        return count != null && count > 0;
+    }
+    public Share.SharePermission getPermission(int drawId, int userId) {
+        List<Share.SharePermission> permissions =
+                jdbcTemplate.query(
+                        "SELECT permiso FROM share WHERE drawId = ? AND userId = ?",
+                        (rs, row) -> Share.SharePermission.valueOf(rs.getString("permiso")),
+                        drawId,
+                        userId
+                );
+
+        return permissions.isEmpty() ? null : permissions.get(0);
+    }
+
 }

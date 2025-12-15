@@ -1,6 +1,7 @@
 package com.liceu.demo.dao;
 
 import com.liceu.demo.models.Draw;
+import com.liceu.demo.models.Share;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface DrawDAO {
 
     void deleteDraw(int idDraw);
 
-    int getDrawById();
+    public Draw getDrawById(int idDraw);
 
     List<Draw> getDrawsPublics();
 
@@ -24,4 +25,14 @@ public interface DrawDAO {
     public void updateStatTrash(int idDraw, boolean trash);
 
     public void updateStatPublic(int idDraw, boolean trash);
+
+    public void saveShare(int idDraw, int idUser, Share.SharePermission permission);
+
+    public List<Share> findSharedByUser(int ownerId);
+
+    public boolean isDrawSharedWithUser(int drawId, int userId);
+
+    public List<Share> findSharedWithUser(int userId);
+
+    public Share.SharePermission getPermission(int drawId, int userId);
 }

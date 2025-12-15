@@ -94,3 +94,6 @@ input[type="submit"]:hover,a:hover,button:hover,#buttonSaveDraw:hover {
 text-align: center;
 font-size: 40px;
 }
+#sharedWithYou{
+    margin-top: 40px;
+}

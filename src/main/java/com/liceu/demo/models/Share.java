@@ -1,9 +1,15 @@
 package com.liceu.demo.models;
 
 public class Share {
-    int drawId;
-    int userId;
-    String permiso;
+
+    private int drawId;
+    private int userId;
+    private SharePermission permission;
+
+    public enum SharePermission {
+        VIEW,
+        EDIT
+    }
 
     public int getDrawId() {
         return drawId;
@@ -21,11 +27,11 @@ public class Share {
         this.userId = userId;
     }
 
-    public String getPermiso() {
-        return permiso;
+    public SharePermission getPermission() {
+        return permission;
     }
 
-    public void setPermiso(String permiso) {
-        this.permiso = permiso;
+    public void setPermission(SharePermission permission) {
+        this.permission = permission;
     }
 }

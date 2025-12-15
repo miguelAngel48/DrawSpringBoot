@@ -30,7 +30,16 @@ public class ShapesDAOImplementsSQL implements ShapesDAO {
 
     @Override
     public Shape getShape(int idVersion) {
-        List<Shape> s = jdbcTemplate.query("select * from shape where idVersion = ?", shapeRowMapper, idVersion);
+        List<Shape> s = jdbcTemplate.query(
+                "select * from shape where idVersion = ?",
+                shapeRowMapper,
+                idVersion
+        );
+
+        if (s.isEmpty()) {
+            return null;
+        }
+
         return s.get(0);
     }
 

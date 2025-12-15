@@ -32,6 +32,11 @@
             <th>creation date</th>
             <th>width</th>
             <th>height</th>
+            <th>share with id user</th>
+            <th>redraw</th>
+            <th>publicate</th>
+            <th>delete</th>
+
         </tr>
 
         <tr th:each="draw : ${draws}" class="unitsGalery">
@@ -44,9 +49,19 @@
             <th th:text="${draw.DateCreate}"></th>
             <th th:text="${draw.width}+ 'px'"></th>
             <th th:text="${draw.height}+ 'px'"></th>
-
+            <td>
+                <form action="/share" method="post">
+                    <input type="hidden" name="id" th:value="${draw.id}">
+                    <input type="number" name="idUser" placeholder="User ID" required>
+                    <select name="permission">
+                        <option value="VIEW">View</option>
+                        <option value="EDIT">Edit</option>
+                    </select>
+                    <button type="submit">Share</button>
+                </form>
+            </td>
             <th>
-                <a th:if="${user == draw.name}" th:href="@{'/lienzo/get/'+ ${draw.id}}">Editar
+                <a th:if="${user == draw.name}" th:href="@{'/lienzo/get/'+ ${draw.id}}">
                     redraw
                 </a>
             </th>
@@ -90,6 +105,46 @@
 
         </tr>
     </table>
+
+
+
+    <table id="sharedWithYou">
+        <tr>
+            <th colspan="3">
+                <h2>Shared with you</h2>
+            </th>
+        </tr>
+        <tr>
+            <th>Preview</th>
+            <th>Draw ID</th>
+            <th>Permission</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:each="share : ${sharedWithMe}">
+            <th><canvas class="draw-preview" width="80" height="80"></canvas>
+                <input type="hidden" class="shapesPreview" th:value="${share.shapes}"
+                    th:attr="data-shapes=${share.shapes}">
+            </th>
+            <td th:text="${share.drawId}"></td>
+            <td th:text="${share.permission}"></td>
+            <td>
+
+
+                <a th:if="${share.permission.name() == 'VIEW'}" th:href="@{'/lienzo/preview/' + ${share.drawId}}">
+                    Open
+                </a>
+
+
+                <a th:if="${share.permission.name() == 'EDIT'}" th:href="@{'/lienzo/copy/' + ${share.drawId}}">
+                    Copy
+                </a>
+
+            </td>
+        </tr>
+    </table>
+
+
     <script th:src="@{/scripts/galery.js}"></script>
 </body>
 
